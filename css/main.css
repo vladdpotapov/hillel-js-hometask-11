@@ -1,0 +1,45 @@
+/* GENERAL */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #3b3b3b;
+}
+
+/* TABLE */
+.table {
+    border-collapse: collapse;
+    border: 1px solid #000000;
+}
+
+.table__row {
+    background-color: #858585;
+}
+
+.table__heading {
+    background-color: #97deff;
+    border: 1px solid #000000;
+}
+
+.table__cell {
+    background-color: #d1fffd;
+    border: 1px solid #000000;
+}
+
+.table__button {
+    width: 100px;
+    height: 25px;
+    padding: 2px 5px;
+    border: 1px solid #000000;
+    border-radius: 3px;
+    background-color: #ffbd71;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+}
+.table__button:hover {
+    color: #000000;
+    background-color: #ff7300;
+}
