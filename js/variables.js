@@ -6,6 +6,8 @@ const users = [
     { id: '3', name: 'Kate', age: '23', job: 'racer'     },
 ];
 
+let defaultUsers = users;
+
 const tableWrap      = document.getElementById('table-wrap');
 const table          = document.getElementById('table');
 const infoWindow     = document.getElementById('info-window');

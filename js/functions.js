@@ -219,16 +219,23 @@ function saveDataToLocalStorage() {
     localStorage.setItem('Users', stringifiedArray);
 }
 
+// function getDataFromLocalStorage() {
+//         localStorage.getItem('Users');
+//         let parsedArray = JSON.parse('Users');
+//         users = parsedArray;
+//         console.log(users);
+// }
+
 function getDataFromLocalStorage() {
-    const getDataFromLocalStorage = document.getElementById('get-data');
-    getDataFromLocalStorage.addEventListener('click', function () {
-        localStorage.getItem('Users');
-        let parsedArray = JSON.parse('Users');
-        users = parsedArray;
-        saveDataToLocalStorage();
-        updateMainTable();
-        console.log(users);
-    });
+    if (!localStorage.getItem('Users')) {
+        return defaultUsers;
+    }
+    
+    let parsedUsers = JSON.parse(localStorage.getItem('Users'));
+    if (!parsedUsers) {
+        return defaultUsers;
+    }
+    return parsedUsers;
 }
 
 function updateMainTable() {
@@ -282,6 +289,7 @@ function updateMainTable() {
         tableButtonEdit.addEventListener('click', () => showUserEditCard(i));
 
         let tableButtonDelete = createRowActionButton('Delete');
+        tableButtonDelete.addEventListener('click', () => removeUserObject(i));
 
         tableButtonAdd.addEventListener('click', () => showAddNewUserCard(i));
 
@@ -292,20 +300,10 @@ function updateMainTable() {
 }
 
 function removeUserObject(i) {
-    users.splice(users[i], 1);
+    users.splice(i, 1);
     saveDataToLocalStorage();
     updateMainTable();
 }
 
-// function getDataFromLocalStorage() {
-//     if (!localStorage.getItem('Users')) {
-//         return defaultUsers;
-//     }
-    
-//     let parsedUsers = JSON.parse(localStorage.getItem('Users'));
-//     if (!parsedUsers) {
-//         return defaultUsers;
-//     }
-//     return parsedUsers;
-// }
+
 
