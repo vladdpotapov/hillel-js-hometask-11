@@ -13,18 +13,37 @@ body {
     border: 1px solid #000000;
 }
 
+.table-newUser {
+    color: #000000;
+    background-color: #00568f;
+    font-weight: 900;
+}
+
+.table__heading-cell {
+    background-color: #00568f;
+    border: 1px solid #000000;
+}
+
 .table__row {
     background-color: #858585;
 }
 
 .table__heading {
-    background-color: #97deff;
+    background-color: #00568f;
     border: 1px solid #000000;
 }
 
 .table__cell {
-    background-color: #d1fffd;
+    background-color: #cecece;
     border: 1px solid #000000;
+}
+
+.table__view-window {
+    background-color: #e5ffd4;
+    border: 1px solid #000000;
+    width: 125px;
+    height: 150px;
+    padding: 15px;
 }
 
 .table__button {
@@ -39,7 +58,12 @@ body {
     outline: none;
     transition: all 0.3s ease;
 }
+
 .table__button:hover {
     color: #000000;
     background-color: #ff7300;
+}
+
+.table__window {
+    padding: 20px;
 }

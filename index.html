@@ -7,19 +7,23 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    <input id="table__button-add" class="table__button" type="button" value="Add New User">
+    <input id="get-data" class="table__button" type="button" value="Get from LS">
 
-    <div class="table-wrap">
+    <div class="table-wrap" id="table-wrap">
+        <input id="table__button-add" class="table__button" type="button" value="Add New User">
         <table class="table" id="table">
-
             <tr class="table__row">
                 <th class="table__heading">ID       </th>
                 <th class="table__heading">NAME     </th>
                 <th class="table__heading">ACTIONS  </th>
             </tr>
-
         </table>
     </div>
+
+    <div id="info-window">
+
+    </div>
+
     <script src="js/functions.js"></script>
     <script src="js/variables.js"></script>
     <script src="js/main.js"></script>
