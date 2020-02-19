@@ -29,7 +29,8 @@ function insertUserDataToRow() {
         tableButtonEdit.addEventListener('click', () => showUserEditCard(i));
 
         let tableButtonDelete = createRowActionButton('Delete');
-        tableButtonDelete.addEventListener('click', () => removeUserObject(i));
+        tableButtonDelete.addEventListener('click', () => confirmRemoveUserObject(i));
+
 
         tableButtonAdd.addEventListener('click', () => showAddNewUserCard(i));
 
@@ -130,7 +131,7 @@ function showUserEditCard(i) {
         // obj[key] = arr[index];
         // });
 
-        const objProp = {id: null, name: null, age: null, job: null};
+        const objProp = {id: null, name: null, age: null, job: null, number: null, card: null};
         Object.keys(objProp).forEach(function(key, index){
             objProp[key] = array[index];
         });
@@ -196,7 +197,7 @@ function showAddNewUserCard(i) {
                 } 
             }
  
-            const objProp = {id: null, name: null, age: null, job: null};
+            const objProp = {id: null, name: null, age: null, job: null, number: null, card: null};
             Object.keys(objProp).forEach(function(key, index){
                 objProp[key] = array[index];
             });
@@ -289,7 +290,7 @@ function updateMainTable() {
         tableButtonEdit.addEventListener('click', () => showUserEditCard(i));
 
         let tableButtonDelete = createRowActionButton('Delete');
-        tableButtonDelete.addEventListener('click', () => removeUserObject(i));
+        tableButtonDelete.addEventListener('click', () => confirmRemoveUserObject(i));
 
         tableButtonAdd.addEventListener('click', () => showAddNewUserCard(i));
 
@@ -300,10 +301,47 @@ function updateMainTable() {
 }
 
 function removeUserObject(i) {
+    infoWindow.innerHTML = '';
     users.splice(i, 1);
     saveDataToLocalStorage();
     updateMainTable();
 }
 
+function confirmRemoveUserObject(i) {
+    infoWindow.innerHTML = '';
 
+    let confirmBox = document.createElement('div');
+    confirmBox.classList.add('confirm-box');
+    infoWindow.append(confirmBox);
 
+    let confirmBoxCell = document.createElement('div');
+    confirmBoxCell.classList.add('confirm-box__cell');
+    confirmBoxCell.innerHTML = 'Are You sure?';
+    confirmBox.append(confirmBoxCell);
+
+    let confirmButtonYes = document.createElement('input');
+    confirmButtonYes.setAttribute('type', 'button');
+    confirmButtonYes.setAttribute('value', 'Delete');
+    confirmButtonYes.classList.add('confirm-box__buttons');
+    confirmButtonYes.addEventListener('click', () => removeUserObject(i));
+    confirmBox.append(confirmButtonYes);
+
+    let confirmButtonNo = document.createElement('input');
+    confirmButtonNo.setAttribute('type', 'button');
+    confirmButtonNo.setAttribute('value', 'Cancel');
+    confirmButtonNo.classList.add('confirm-box__buttons');
+    confirmButtonNo.addEventListener('click', () => closeWindow(confirmBox));
+    confirmBox.append(confirmButtonNo);
+}
+
+// Исправить: 
+// 2. При удалении всех юзеров, нажимая на кнопку Add New User, форма создания всплывает, но без полей 
+//    с именами свойств.
+
+// Реализовать:
+// 1. Сохранения измененных данных при перезагрузке страницы - localStorage.
+// 2. Валидация всех текстовых полей ввода - регулярные выражения.
+// 3. Оптимизация кода.
+
+// Выполнено:
+// 1. При удалении другого объекта сразу после удаления первого, окно подтверждения не всплывает.

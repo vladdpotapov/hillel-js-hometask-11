@@ -11,6 +11,7 @@ body {
 .table {
     border-collapse: collapse;
     border: 1px solid #000000;
+    background-color: #00568f;
 }
 
 .table-newUser {
@@ -66,4 +67,37 @@ body {
 
 .table__window {
     padding: 20px;
+}
+
+.confirm-box {
+    text-align: center;
+    padding: 10px;
+    max-width: 376px;
+    justify-content: center;
+    background-color: #e5ffd4;
+}
+
+.confirm-box__cell {
+    padding: 10px;
+}
+
+.confirm-box__buttons {
+    width: 100px;
+    height: 25px;
+    padding: 2px 5px;
+    border: 1px solid #000000;
+    border-radius: 3px;
+    background-color: #ffbd71;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.confirm-box__buttons:hover {
+    background-color: #ff7300;
+}
+
+.confirm-box__buttons:not(:last-child) {
+    margin-right: 20px;
 }
