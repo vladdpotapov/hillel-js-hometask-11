@@ -68,12 +68,17 @@ function showUserInfoCard(i) {
         userInfoRow.append(userInfoCell);
     }
 
-    let userInfoCloseButton = document.createElement('input');
-    userInfoCloseButton.setAttribute('type', 'button');
-    userInfoCloseButton.setAttribute('value', 'Close');
-    userInfoCloseButton.classList.add('table__button');
+    const userInfoCloseButton = createInfoWindowButtons('Close', userInfoTable);
     userInfoCloseButton.addEventListener('click', () => closeWindow(userInfoTable));
-    userInfoTable.append(userInfoCloseButton);
+}
+
+function createInfoWindowButtons(buttonValue, parent) {
+    let buttonName = document.createElement('input');
+    buttonName.setAttribute('type', 'button');
+    buttonName.setAttribute('value', buttonValue);
+    buttonName.classList.add('table__button');
+    parent.append(buttonName);
+    return buttonName;
 }
 
 function showUserEditCard(i) {
@@ -86,6 +91,7 @@ function showUserEditCard(i) {
     let userInfoCell;
     let userInfoRow;
     let userEditInput;
+    let inputClassIdentifier = 1;
     for (let key in users[i]) {
         userInfoRow = document.createElement('tr');
         userInfoRow.classList.add('table__row');
@@ -99,20 +105,15 @@ function showUserEditCard(i) {
         userEditInput = document.createElement('input');
         userEditInput.setAttribute('value', users[i][key]);
         userEditInput.classList.add('edit__inputs');
+        userEditInput.classList.add('inputs' + inputClassIdentifier);
         userInfoTable.append(userEditInput);
+        inputClassIdentifier++;
     }
 
-    let userInfoCloseButton = document.createElement('input');
-    userInfoCloseButton.setAttribute('type', 'button');
-    userInfoCloseButton.setAttribute('value', 'Close');
-    userInfoCloseButton.classList.add('table__button');
+    const userInfoCloseButton = createInfoWindowButtons('Close', userInfoTable);
     userInfoCloseButton.addEventListener('click', () => closeWindow(userInfoTable));
-    userInfoTable.append(userInfoCloseButton);
 
-    let userInfoSaveButton = document.createElement('input');
-    userInfoSaveButton.setAttribute('type', 'button');
-    userInfoSaveButton.setAttribute('value', 'Save');
-    userInfoSaveButton.classList.add('table__button');
+    const userInfoSaveButton = createInfoWindowButtons('Save', userInfoTable);
     userInfoSaveButton.addEventListener('click', function() {
         let userInputs = document.querySelectorAll('.edit__inputs');
         let array       = Object.values(users[i]);
@@ -121,30 +122,21 @@ function showUserEditCard(i) {
             if (array[i] !== userInputs[i].value) {
                 array[i] = userInputs[i].value;
             } 
-            // console.log(array[i]);
         }
 
-        // const obj = {id: null, name: null};
-        // const arr = ['11', 'qwerty'];
-
-        // Object.keys(obj).forEach(function(key, index){
-        // obj[key] = arr[index];
-        // });
-
-        const objProp = {id: null, name: null, age: null, job: null, number: null, card: null};
-        Object.keys(objProp).forEach(function(key, index){
-            objProp[key] = array[index];
+        const objectKeys = {id: null, name: null, age: null, job: null, number: null, card: null};
+        Object.keys(objectKeys).forEach(function(key, index){
+            objectKeys[key] = array[index];
         });
-        // console.log(objProp);
 
-        users.splice([i], 1, objProp);
-        console.log(users);
+        users.splice([i], 1, objectKeys);
 
-        saveDataToLocalStorage();
-        updateMainTable();
+        const valid = validateInputs();             // !
+        if (valid) {                                // !
+            saveDataToLocalStorage();
+            updateMainTable();
+        }
     });
-
-    userInfoTable.append(userInfoSaveButton);
 }
 
 function showAddNewUserCard(i) {
@@ -159,7 +151,9 @@ function showAddNewUserCard(i) {
         let userInfoCell;
         let userInfoRow;
         let userEditInput;
-        for (let key in users[i]) {
+        let inputClassIdentifier = 1;
+
+        for (let key in fakeObject) {                   
             userInfoRow = document.createElement('tr');
             userInfoRow.classList.add('table__row');
             userInfoTable.append(userInfoRow);
@@ -171,25 +165,19 @@ function showAddNewUserCard(i) {
     
             userEditInput = document.createElement('input');
             userEditInput.setAttribute('value', '');
-
             userEditInput.classList.add('edit__inputs');
+            userEditInput.classList.add('inputs' + inputClassIdentifier);
             userInfoTable.append(userEditInput);
+            inputClassIdentifier++;
         }
 
-        let userInfoCloseButton = document.createElement('input');
-        userInfoCloseButton.setAttribute('type', 'button');
-        userInfoCloseButton.setAttribute('value', 'Close');
-        userInfoCloseButton.classList.add('table__button');
+        const userInfoCloseButton = createInfoWindowButtons('Close', userInfoTable);
         userInfoCloseButton.addEventListener('click', () => closeWindow(userInfoTable));
-        userInfoTable.append(userInfoCloseButton);
 
-        let userInfoSaveButton = document.createElement('input');
-        userInfoSaveButton.setAttribute('type', 'button');
-        userInfoSaveButton.setAttribute('value', 'Save');
-        userInfoSaveButton.classList.add('table__button');
+        const userInfoSaveButton = createInfoWindowButtons('Save', userInfoTable);
         userInfoSaveButton.addEventListener('click', function() {
             let userInputs = document.querySelectorAll('.edit__inputs');
-            let array       = Object.values(users[i]);
+            let array       = Object.values(fakeObject);                    
     
             for (let i = 0; i < userInputs.length; i++) {
                 if (array[i] !== userInputs[i].value) {
@@ -197,18 +185,18 @@ function showAddNewUserCard(i) {
                 } 
             }
  
-            const objProp = {id: null, name: null, age: null, job: null, number: null, card: null};
-            Object.keys(objProp).forEach(function(key, index){
-                objProp[key] = array[index];
+            const objectKeys = {id: null, name: null, age: null, job: null, number: null, card: null};
+            Object.keys(objectKeys).forEach(function(key, index){
+                objectKeys[key] = array[index];
             });
 
-            users.push(objProp);
-            console.log(users);
-    
-            saveDataToLocalStorage();
-            updateMainTable();
+            const valid = validateInputs();             
+            if (valid) {  
+                users.push(objectKeys);                              
+                saveDataToLocalStorage();               
+                updateMainTable();                      
+            }
         });
-        userInfoTable.append(userInfoSaveButton);
 }
 
 function closeWindow(itemToRemove) {
@@ -216,93 +204,59 @@ function closeWindow(itemToRemove) {
 }
 
 function saveDataToLocalStorage() {
-    let stringifiedArray = JSON.stringify(users);
-    localStorage.setItem('Users', stringifiedArray);
+    const stringifiedArray = users.map(function(item) {     
+        return JSON.stringify(item)                         
+    });
+    const stringArray = stringifiedArray.join(';');         
+    localStorage.setItem('Users', stringArray);             
 }
 
-// function getDataFromLocalStorage() {
-//         localStorage.getItem('Users');
-//         let parsedArray = JSON.parse('Users');
-//         users = parsedArray;
-//         console.log(users);
-// }
-
-function getDataFromLocalStorage() {
-    if (!localStorage.getItem('Users')) {
-        return defaultUsers;
+function getDataFromLocalStorage() {                        
+    if (!localStorage.getItem('Users')) {                   
+        users = defaultUsers;                               
+        return;                                             
     }
     
-    let parsedUsers = JSON.parse(localStorage.getItem('Users'));
-    if (!parsedUsers) {
-        return defaultUsers;
+    let parsedUsersArray = localStorage.getItem('Users').split(';');  
+    const usersArray = parsedUsersArray.map(item => JSON.parse(item)) 
+    if (!usersArray) {                                                
+        users =  defaultUsers;                                        
+        return;                                                       
     }
-    return parsedUsers;
+    users =  usersArray;                                              
+}
+
+function createMainTableHeadings(elementToCreate, elementClass, elementInnerText) {
+    let element = document.createElement(elementToCreate);
+    element.classList.add(elementClass);
+    element.innerHTML = elementInnerText;
+    return element;
 }
 
 function updateMainTable() {
     table.innerHTML = '';
 
-    
     let headingRow = document.createElement('tr');
     headingRow.classList.add('table__row');
     table.append(headingRow);
     
-    let headingCellId = document.createElement('th');
-    headingCellId.classList.add('table__heading-cell');
-    headingCellId.innerHTML = 'ID';
+    let headingCellId = createMainTableHeadings('th', 'table__heading-cell', 'ID');
     headingRow.append(headingCellId);
 
-    let headingCellName = document.createElement('th');
-    headingCellName.classList.add('table__heading-cell');
-    headingCellName.innerHTML = 'NAME';
+    let headingCellName = createMainTableHeadings('th', 'table__heading-cell', 'NAME');
     headingRow.append(headingCellName);
 
-    let headingCellActinos = document.createElement('th');
-    headingCellActinos.classList.add('table__heading-cell');
-    headingCellActinos.innerHTML = 'ACTIONS';
+    let headingCellActinos = createMainTableHeadings('th', 'table__heading-cell', 'ACTIONS');
     headingRow.append(headingCellActinos);
 
-    for (let i = 0; i < users.length; i++) {
-        let row = document.createElement('tr');
-        row.classList.add('table__row');
-        table.append(row);
-
-        let cellId = document.createElement('td');
-        cellId.classList.add('table__cell');
-        row.append(cellId);
-
-        cellId.innerText = users[i].id;
-
-        let cellName = document.createElement('td');
-        cellName.classList.add('table__cell');
-        row.append(cellName);
-
-        cellName.innerText = users[i].name;
-
-        let cellActions = document.createElement('td');
-        cellActions.classList.add('table__cell');
-        row.append(cellActions);
-
-        let tableButtonView   = createRowActionButton('View');
-        tableButtonView.addEventListener('click', () => showUserInfoCard(i));
-
-        let tableButtonEdit   = createRowActionButton('Edit');
-        tableButtonEdit.addEventListener('click', () => showUserEditCard(i));
-
-        let tableButtonDelete = createRowActionButton('Delete');
-        tableButtonDelete.addEventListener('click', () => confirmRemoveUserObject(i));
-
-        tableButtonAdd.addEventListener('click', () => showAddNewUserCard(i));
-
-        cellActions.append(tableButtonView);
-        cellActions.append(tableButtonEdit);
-        cellActions.append(tableButtonDelete);
-    }
+    insertUserDataToRow();
 }
 
 function removeUserObject(i) {
     infoWindow.innerHTML = '';
+
     users.splice(i, 1);
+    
     saveDataToLocalStorage();
     updateMainTable();
 }
@@ -319,29 +273,78 @@ function confirmRemoveUserObject(i) {
     confirmBoxCell.innerHTML = 'Are You sure?';
     confirmBox.append(confirmBoxCell);
 
-    let confirmButtonYes = document.createElement('input');
-    confirmButtonYes.setAttribute('type', 'button');
-    confirmButtonYes.setAttribute('value', 'Delete');
-    confirmButtonYes.classList.add('confirm-box__buttons');
+    let confirmButtonYes = createConfirmButtons('input', 'Delete', confirmBox);
     confirmButtonYes.addEventListener('click', () => removeUserObject(i));
-    confirmBox.append(confirmButtonYes);
 
-    let confirmButtonNo = document.createElement('input');
-    confirmButtonNo.setAttribute('type', 'button');
-    confirmButtonNo.setAttribute('value', 'Cancel');
-    confirmButtonNo.classList.add('confirm-box__buttons');
+    let confirmButtonNo = createConfirmButtons('input', 'Cancel', confirmBox);
     confirmButtonNo.addEventListener('click', () => closeWindow(confirmBox));
-    confirmBox.append(confirmButtonNo);
 }
 
-// Исправить: 
-// 2. При удалении всех юзеров, нажимая на кнопку Add New User, форма создания всплывает, но без полей 
-//    с именами свойств.
+function validateInputs() {
+    let inputId     = document.querySelector('.inputs1');
+    let inputName   = document.querySelector('.inputs2');
+    let inputAge    = document.querySelector('.inputs3');
+    let inputJob    = document.querySelector('.inputs4');
+    let inputNumber = document.querySelector('.inputs5');
+    let inputCard   = document.querySelector('.inputs6'); 
 
-// Реализовать:
-// 1. Сохранения измененных данных при перезагрузке страницы - localStorage.
-// 2. Валидация всех текстовых полей ввода - регулярные выражения.
-// 3. Оптимизация кода.
+    let valid = true;
 
-// Выполнено:
-// 1. При удалении другого объекта сразу после удаления первого, окно подтверждения не всплывает.
+    if (!inputId.value) {
+        inputId.style.border = '1px solid red';
+        valid = false;
+    } else {
+        inputId.style.border = 'none';
+    }
+
+    if (!inputName.value || (!isNaN(inputName.value))) {
+        inputName.style.border = '1px solid red';
+        valid = false;
+    } else {
+        inputName.style.border = 'none';
+    }
+
+    if (!inputAge.value || (isNaN(inputAge.value))) {
+        inputAge.style.border = '1px solid red';
+        valid = false;
+    } else {
+        inputAge.style.border = 'none';
+    }
+
+    if (!inputJob.value || (!isNaN(inputJob.value))) {
+        inputJob.style.border = '1px solid red';
+        valid = false;
+    } else {
+        inputJob.style.border = 'none';
+    }
+
+    let patternPhoneNumber = /^[0][0-9]{2}[-][0-9]{3}[-][0-9]{2}[-][0-9]{2}$/;
+    let resultPhoneNumber = patternPhoneNumber.test(inputNumber.value);
+
+    if (!resultPhoneNumber) {
+        inputNumber.style.border = '1px solid red';
+        valid = false;
+    } else {
+        inputNumber.style.border = 'none';
+    }
+
+    let patternCreditCard = /^\d{4} \d{4} \d{4} \d{4}$/;
+    let resultCreditCard = patternCreditCard.test(inputCard.value);
+
+    if (!resultCreditCard) {
+        inputCard.style.border = '1px solid red';
+        valid = false;
+    } else {
+        inputCard.style.border = 'none';
+    }
+    return valid;
+}
+
+function createConfirmButtons(element, elementValue, parrentToAppend) {
+    let button = document.createElement(element);
+    button.setAttribute('type', 'button');
+    button.setAttribute('value', elementValue);
+    button.classList.add('confirm-box__buttons');
+    parrentToAppend.append(button);
+    return button;
+}
